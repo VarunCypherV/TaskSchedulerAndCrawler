@@ -1,0 +1,8 @@
+
+    Create the scheduler                                      DONE
+    Need to Verify the Duplicating Entry
+    Create and test a simple Webcrawler
+    Modify to hit specific URL with different parameters
+    Modify to Fit Usecase
+    Snapshot feature
+    Snapshot save in folder

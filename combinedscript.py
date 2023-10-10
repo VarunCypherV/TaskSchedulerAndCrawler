@@ -7,13 +7,14 @@ import threading
 import datetime
 
 
-#====================================MS SQL CONNECTION
+#MS SQL CONNECTION=============================
 DRIVER_NAME = 'SQL SERVER'
 SERVER_NAME ='VARUN'
 DATABASE_NAME='RAMCO_TESTDB'
 
-    # uid=<username>;
-    # pwd=<password>;
+#NEED TO PUT INSIDE CONNECTION STRING IF IT IS AUTHENTICATED WITH PASWD
+# uid=<username>;
+# pwd=<password>;
 
 connection_string = f"""
     DRIVER={{{DRIVER_NAME}}};
@@ -25,7 +26,7 @@ connection_string = f"""
 conn = odbc.connect(connection_string)
 print(conn)
 
-#==========================================UTILITY FUNCTIONS
+#UTILITY FUNCTIONS===========================
 
 def get_time() -> str: #return type is specified using -> str meaning return type is string
     return time.strftime("%X (%d/%m/%y)")
@@ -35,7 +36,8 @@ def format_datetime(dt):
 
 def create_tag(scheduled_datetime,empid,reportName):
     return str(scheduled_datetime)+str(empid)+reportName+str(reportName)
-#=================================================THREADING AND CRAWLER (TASK WILL BE MODIFIED TO CRAWLER)=======
+
+#THREADING AND CRAWLER (TASK WILL BE MODIFIED TO CRAWLER)=======
 def start_thread():
     job = threading.Thread(target=task)
     job.start()
@@ -44,7 +46,7 @@ def task():
    print("doign task at ",get_time())
    return schedule.CancelJob 
 
-#==========================================PROJECT OBJECTIVE DRIVEN FUNCTIONS
+#PROJECT OBJECTIVE DRIVEN FUNCTIONS===============================
 def ExecuteQuery():
     print("fetched at " ,get_time())
     cursor = conn.cursor()
@@ -62,15 +64,14 @@ schedule.every().minute.do(ExecuteQuery) #ENTRY POINT IN THE CODE
 
 def schedulemytask(scheduled_datetime,empid,reportName):
     schedule_date,scheduled_time=scheduled_datetime.split(" ")
-    generated_tag=create_tag(scheduled_datetime,empid,reportName)
+    generated_tag=create_tag(scheduled_datetime,empid,reportName)  #generating unique tag since library tag doesnt give an id
     if(datetime.datetime.now().strftime("%Y-%m-%d")==schedule_date and schedule.get_jobs(generated_tag)==[]):
         schedule.every().day.at(scheduled_time).do(start_thread).tag(generated_tag)
     
-
+#=====================SCHEDULE IS RUNNING
 while True:
     schedule.run_pending()
     time.sleep(1)
-
 
 
 
