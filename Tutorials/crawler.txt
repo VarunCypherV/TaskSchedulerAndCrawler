@@ -1,0 +1,12 @@
+
+# ===================CRAWLER READ===============
+# https://www.zenrows.com/blog/web-crawler-python#conclusion
+
+# https://medium.com/@igorzabukovec/automate-web-crawling-with-selenium-python-part-1-85113660de96
+
+# https://medium.com/@igorzabukovec/crawl-websites-with-selenium-part-2-3e714120e93f
+
+# https://medium.com/@igorzabukovec/pro-tips-for-selenium-6cca1c47b02c
+
+# ==================================================
+
