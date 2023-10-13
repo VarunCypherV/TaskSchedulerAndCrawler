@@ -11,12 +11,18 @@ from crawler import crawler
 DRIVER_NAME = 'SQL SERVER'
 SERVER_NAME ='VARUN'
 DATABASE_NAME='RAMCO_TESTDB'
+
+#NEED TO PUT INSIDE CONNECTION STRING IF IT IS AUTHENTICATED WITH PASWD
+# uid=<username>;
+# pwd=<password>;
+
 connection_string = f"""
     DRIVER={{{DRIVER_NAME}}};
     SERVER={SERVER_NAME};
     DATABASE={{{DATABASE_NAME}}};
     Trusted_Connection=yes;
 """
+
 conn = odbc.connect(connection_string)
 print(conn)
 
@@ -31,16 +37,20 @@ def format_datetime(dt):
 def create_tag(scheduled_datetime,empid,reportName):
     return str(scheduled_datetime)+str(empid)+reportName+str(reportName)
 
-#THREADING AND PROJECT OBJECTIVE FUNCTIONS========================
-def start_thread(empid,reportName): #If Multiple Employee schedule for same time , hence i have done threading here
+#THREADING AND CRAWLER (TASK WILL BE MODIFIED TO CRAWLER)=======
+# def start_thread():
+#     job = threading.Thread(target=task)
+#     job.start()
+def start_thread(empid,reportName):
     job = threading.Thread(target=lambda: task(empid,reportName))
     job.start()
 
-def task(empid,reportName):  #Primary function for crawler and it ensures that only once it is run since package has no other option
+def task(empid,reportName):
    crawler(reportName,"https://www.amazon.in",empid)
    return schedule.CancelJob 
 
-def ExecuteQuery():  #Accessing the backend for data
+#PROJECT OBJECTIVE DRIVEN FUNCTIONS===============================
+def ExecuteQuery():
     print("fetched at " ,get_time())
     cursor = conn.cursor()
     query = "SELECT * FROM Test2"
@@ -53,15 +63,16 @@ def ExecuteQuery():  #Accessing the backend for data
         print(f"DBidd: {dbidd}, EmpId: {empid}, ReportName: {reportname}, NeedTime: {formatted_needtime}")
         schedulemytask(formatted_needtime,empid,reportname)
 
-schedule.every().minute.do(ExecuteQuery) #ENTRY POINT : CUSTOMIZABLE => Testing Purpose its every 1 minute
+schedule.every().minute.do(ExecuteQuery) #ENTRY POINT IN THE CODE 
 
 def schedulemytask(scheduled_datetime,empid,reportName):
     schedule_date,scheduled_time=scheduled_datetime.split(" ")
     generated_tag=create_tag(scheduled_datetime,empid,reportName)  #generating unique tag since library tag doesnt give an id
     if(datetime.datetime.now().strftime("%Y-%m-%d")==schedule_date and schedule.get_jobs(generated_tag)==[]):
+        # schedule.every().day.at(scheduled_time).do(start_thread).tag(generated_tag)
          schedule.every().day.at(scheduled_time).do(lambda: start_thread(empid,reportName)).tag(generated_tag)
     
-#=====================SCHEDULE IS RUNNING=========================
+#=====================SCHEDULE IS RUNNING
 while True:
     schedule.run_pending()
     time.sleep(1)
