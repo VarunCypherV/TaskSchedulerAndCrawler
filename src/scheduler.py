@@ -5,7 +5,7 @@ import time
 import schedule
 import threading
 import datetime
-from crawler import crawler
+from crawler import crawlerImage,crawlerContent
 
 #MS SQL CONNECTION=============================
 DRIVER_NAME = 'SQL SERVER'
@@ -32,34 +32,35 @@ def create_tag(scheduled_datetime,empid,reportName):
     return str(scheduled_datetime)+str(empid)+reportName+str(reportName)
 
 #THREADING AND PROJECT OBJECTIVE FUNCTIONS========================
-def start_thread(empid,reportName): #If Multiple Employee schedule for same time , hence i have done threading here
-    job = threading.Thread(target=lambda: task(empid,reportName))
+def start_thread(empid,reportName,email): #If Multiple Employee schedule for same time , hence i have done threading here
+    job = threading.Thread(target=lambda: task(empid,reportName,email))
     job.start()
 
-def task(empid,reportName):  #Primary function for crawler and it ensures that only once it is run since package has no other option
-   crawler(reportName,"https://www.amazon.in",empid)
+def task(empid,reportName,email):  #Primary function for crawler and it ensures that only once it is run since package has no other option
+   crawlerImage(reportName,"https://www.amazon.in",empid,email)
+   crawlerContent(reportName,"https://www.amazon.in",empid,email)
    return schedule.CancelJob 
 
 def ExecuteQuery():  #Accessing the backend for data
     print("fetched at " ,get_time())
     cursor = conn.cursor()
-    query = "SELECT * FROM Test2"
+    query = "SELECT * FROM EMP_NT"
     cursor.execute(query)
     rows = cursor.fetchall()
     cursor.close()
     for row in rows:
-        dbidd, empid, reportname, needtime = row
+        empid, reportname, needtime , email= row
         formatted_needtime = format_datetime(needtime)
-        print(f"DBidd: {dbidd}, EmpId: {empid}, ReportName: {reportname}, NeedTime: {formatted_needtime}")
-        schedulemytask(formatted_needtime,empid,reportname)
+        print(f"EmpId: {empid}, ReportName: {reportname}, NeedTime: {formatted_needtime} , email : {email}")
+        schedulemytask(formatted_needtime,empid,reportname,email)
 
 schedule.every().minute.do(ExecuteQuery) #ENTRY POINT : CUSTOMIZABLE => Testing Purpose its every 1 minute
 
-def schedulemytask(scheduled_datetime,empid,reportName):
+def schedulemytask(scheduled_datetime,empid,reportName,email):
     schedule_date,scheduled_time=scheduled_datetime.split(" ")
     generated_tag=create_tag(scheduled_datetime,empid,reportName)  #generating unique tag since library tag doesnt give an id
     if(datetime.datetime.now().strftime("%Y-%m-%d")==schedule_date and schedule.get_jobs(generated_tag)==[]):
-         schedule.every().day.at(scheduled_time).do(lambda: start_thread(empid,reportName)).tag(generated_tag)
+         schedule.every().day.at(scheduled_time).do(lambda: start_thread(empid,reportName,email)).tag(generated_tag)
     
 #=====================SCHEDULE IS RUNNING=========================
 while True:

@@ -1,8 +1,13 @@
 
     Create the scheduler                                      DONE
     Need to Verify the Duplicating Entry                      DONE
-    Create and test a simple Webcrawler 
-    Modify to hit specific URL with different parameters
-    Modify to Fit Usecase
-    Snapshot feature
-    Snapshot save in folder
+    Create and test a simple Webcrawler                       DONE
+    Modify to hit specific URL with different parameters      DONE
+    Modify to Fit Usecase                                     DONE
+    Snapshot feature                                          DONE
+    Snapshot save in folder                                   DONE
+
+    Content crawling                                          DONE
+    Mail                                                      DONE
+    Trigger asked crawling                                    PROGRESS
+    Chat gpt / sth to query from raw data
