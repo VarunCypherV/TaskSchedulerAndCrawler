@@ -5,9 +5,6 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-# EMAIL_ADDRESS = "varunfordev@outlook.com"
-# EMAIL_PASSWORD = "devforvarun#2003"
-
 EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
