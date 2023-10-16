@@ -9,5 +9,5 @@
 
     Content crawling                                          DONE
     Mail                                                      DONE
-    Trigger asked crawling                                    PROGRESS
-    Chat gpt / sth to query from raw data
+    Trigger asked crawling                                    DONE
+                
