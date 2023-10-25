@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from PIL import Image
-from mailsender import sendEmail
+from mailsender import sendEmail , sendEmailContent
 
 def crawlerImage(reportName,search_url,name,email):
     chrome_options = Options()
@@ -53,6 +53,6 @@ def crawlerContent(reportName, search_url, name,email):
         for element in elements:
             file.write(element.text + '\n')
 
-    sendEmail(text_file_path,email)
+    sendEmailContent(text_file_path,email)
     driver.quit()
     

@@ -38,6 +38,7 @@ def start_thread(empid,reportName,email): #If Multiple Employee schedule for sam
 
 def task(empid,reportName,email):  #Primary function for crawler and it ensures that only once it is run since package has no other option
    crawlerImage(reportName,"https://www.amazon.in",empid,email)
+   time.sleep(1)
    crawlerContent(reportName,"https://www.amazon.in",empid,email)
    return schedule.CancelJob 
 
@@ -60,7 +61,8 @@ def schedulemytask(scheduled_datetime,empid,reportName,email):
     schedule_date,scheduled_time=scheduled_datetime.split(" ")
     generated_tag=create_tag(scheduled_datetime,empid,reportName)  #generating unique tag since library tag doesnt give an id
     if(datetime.datetime.now().strftime("%Y-%m-%d")==schedule_date and schedule.get_jobs(generated_tag)==[]):
-         schedule.every().day.at(scheduled_time).do(lambda: start_thread(empid,reportName,email)).tag(generated_tag)
+        time.sleep(1)
+        schedule.every().day.at(scheduled_time).do(lambda: start_thread(empid,reportName,email)).tag(generated_tag)
     
 #=====================SCHEDULE IS RUNNING=========================
 while True:

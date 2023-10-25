@@ -18,6 +18,7 @@ connection_string = f"""
     Trusted_Connection=yes;
 """
 conn = odbc.connect(connection_string)
+conn.commit()
 print(conn)
 
 #UTILITY FUNCTIONS===========================
@@ -67,7 +68,6 @@ def schedulemytask(scheduled_datetime,empid,reportName,email):
 while True:
     schedule.run_pending()
     time.sleep(1)
-
 
 
 
